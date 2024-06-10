@@ -128,3 +128,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # For development, add this to serve static files
 import os
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "main/static")]
+
+STATIC_ROOT = "/home/joefawzy/zajel_app/zajel_app/static"
