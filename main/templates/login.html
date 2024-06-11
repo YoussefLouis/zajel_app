@@ -44,31 +44,14 @@
         border: none;
         border-radius: 17px;
     }
-    .form-label, .form-control, .form-select {
+    .form-label, .form-control {
         color: #ffffff;
     }
-    .form-control, .form-select {
+    .form-control {
         background-color: rgba(30, 30, 47, 0.5); 
         color: #ffffff;
         border: 0px solid #272428;
         border-radius: 10px;
-    }
-    .form-select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23FFFFFF" d="M2 0L0 2h4z"/></svg>');
-        background-repeat: no-repeat;
-        background-position: right 10px top 50%;
-        background-size: 10px 10px;
-        padding-right: 30px;
-    }
-    .form-select option {
-        background-color: rgba(30, 30, 47, 0.5); 
-        color: #ffffff;
-    }
-    .form-select:focus {
-        box-shadow: none; /* Remove the default focus shadow */
     }
     .btn-primary {
         background-color: #435aa9;
@@ -99,11 +82,11 @@
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
-                    {{ form.username }}
+                    <input type="text" name="username" id="username" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    {{ form.password }}
+                    <input type="password" name="password" id="password" class="form-control">
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Login</button>
                 {% if error_message %}
