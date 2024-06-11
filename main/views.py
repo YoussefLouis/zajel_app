@@ -51,18 +51,14 @@ def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
+            hub = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            try:
-                hub = DimHub.objects.get(username=username)
-                if hub.password == password:  # Note: This is not secure. Use hashed passwords in production.
-                    request.session['hub_id'] = hub.hub_id
-                    request.session['hub_name'] = hub.name_en
-                    return redirect('/')  # Redirect to the home page or dashboard
-                else:
-                    error_message = 'Invalid username or password.'
-            except DimHub.DoesNotExist:
-                error_message = 'Hub not found.'
+            if hub.password == password:  # Note: This is not secure. Use hashed passwords in production.
+                request.session['hub_id'] = hub.hub_id
+                request.session['hub_name'] = hub.name_en
+                return redirect('/')  # Redirect to the home page or dashboard
+            else:
+                error_message = 'Invalid username or password.'
     else:
         form = LoginForm()
 

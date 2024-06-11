@@ -65,7 +65,7 @@
         }
     
         .sidebar .footer {
-            margin-top: 210%;
+            margin-top: 200%;
             font-size: 0.9em;
         }
     
@@ -200,6 +200,21 @@
             scrollbar-width: thin;
             scrollbar-color: rgba(102, 102, 102, 0.2) #201f20;
         }
+
+        .overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998; /* Ensure it is behind the sidebar but above the content */
+        }
+
+        .overlay.active {
+            display: block; /* Show the overlay when active */
+        }
     
         @media (max-width: 768px) {
             .sidebar {
@@ -214,13 +229,18 @@
                 margin-left: 0;
                 padding: 20px;
             }
+
+            .sidebar .footer {
+                margin-top: 150%;
+                font-size: 0.9em;
+            }
     
             .sidebar.active {
                 display: flex;
                 position: fixed;
                 top: 0;
                 left: 0;
-                width: 100%;
+                width: 60%;
                 height: 100%;
                 z-index: 999;
                 flex-direction: column;
@@ -263,8 +283,8 @@
             <p>You are logged in as <br> <b>{{ request.session.hub_name }}</b></p>
             <a href="{% url 'flights' %}">Flights</a>
             <a href="{% url 'uavs' %}" class="active">UAVs</a>
-            <a href="{% url 'maintenance' %}">Maintenance</a>
-            <a href="{% url 'settings' %}">Settings</a>
+            <a href="{% url 'uavs' %}">Maintenance (TBD)</a>
+            <a href="{% url 'uavs' %}">Settings (TBD)</a>
             <a href="{% url 'logout' %}">Logout</a>
             <div class="footer">
                 Zajel System UI V0.1 Beta Testing
@@ -280,14 +300,14 @@
                     </div>
                     <div class="details-container">
                         <div class="column">
-                            <p><b>In Service?</b> {% if uav.is_in_service %}Yes{% else %}No{% endif %}</p>
-                            <p><b>Produced:</b> {{ uav.production_date }}</p>
-                            <p><b>Last Maintained:</b> {{ uav.last_maintained_at }}</p>
+                            <p><b>In Service?</b> <br>{% if uav.is_in_service %}Yes{% else %}No{% endif %}</p>
+                            <p><b>Produced:</b> <br>{{ uav.production_date }}</p>
+                            <p><b>Last Maintained:</b> <br>{{ uav.last_maintained_at }}</p>
                         </div>
                         <div class="column">
-                            <p><b>Flight Hours:</b> {{ uav.flight_hours }}</p>
-                            <p><b>Empty Weight:</b> {{ uav.weight }}</p>
-                            <p><b>Status:</b> 
+                            <p><b>Flight Hours:</b> <br>{{ uav.flight_hours }}</p>
+                            <p><b>Empty Weight:</b> <br>{{ uav.weight }}</p>
+                            <p><b>Status:</b> <br>
                                 <span class="
                                     {% if uav.is_flying %}flying{% endif %}
                                     {% if uav.status == 'Completed' %}completed{% endif %}
@@ -301,6 +321,7 @@
             </a>
             {% endfor %}
         </div>
+        <div id="overlay" class="overlay"></div>
     </div>
     
 
@@ -308,10 +329,19 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        document.getElementById('burger-menu').addEventListener('click', function() {
+            var burgerMenu = document.getElementById('burger-menu');
             var sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('active');
-        });
+            var overlay = document.getElementById('overlay');
+
+            burgerMenu.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
     </script>
     
   

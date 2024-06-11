@@ -12,18 +12,19 @@
         body {
             font-family: 'Roboto', sans-serif;
             display: flex;
+            flex-direction: column; /* Change to column for better control */
             height: 100vh;
             background: linear-gradient(135deg, #141213 0%, #242021 100%);
             color: #ffffff;
             margin: 0;
         }
-    
+
         .main-container {
             display: flex;
             width: 100%;
             height: 100%;
         }
-    
+
         .sidebar {
             width: 250px;
             background-color: rgba(102, 102, 102, 0.1);
@@ -37,12 +38,12 @@
             top: 0;
             left: 0;
         }
-    
+
         .sidebar img {
             width: 150px;
             margin-bottom: 20px;
         }
-    
+
         .sidebar a {
             color: #ffffff;
             text-decoration: none;
@@ -53,22 +54,22 @@
             text-align: left;
             box-sizing: border-box;
         }
-    
+
         .sidebar a.active {
             background-color: #4059ad;
             border-radius: 5px;
         }
-    
+
         .sidebar a:hover {
             background-color: #3a3a3d;
             border-radius: 5px;
         }
-    
+
         .sidebar .footer {
-            margin-top: 210%;
+            margin-top: 200%;
             font-size: 0.9em;
         }
-    
+
         .content {
             margin-left: 290px; /* Ensure content starts after sidebar */
             padding: 20px;
@@ -78,15 +79,14 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            width: calc(50% - 250px); /* Adjust width to fit map on the right */
         }
-    
+
         .map-container {
             width: 50%;
             height: 100vh;
             margin-left: auto;
         }
-    
+
         .burger-menu {
             display: none;
             position: fixed;
@@ -95,7 +95,7 @@
             cursor: pointer;
             z-index: 1001;
         }
-    
+
         .burger-menu div {
             width: 25px;
             height: 3px;
@@ -125,26 +125,26 @@
             width: 5px;
             background-color: #435aa9; /* Blue color for the bar */
         }
-        
+
         .flight-item:hover {
             background-color: rgba(102, 102, 102, 0.2);
         }
-        
+
         .details-container {
             display: flex;
             width: 100%;
         }
-        
+
         .column {
             flex: 1;
             display: flex;
             flex-direction: column;
         }
-        
+
         .column p {
             margin: 5px 0;
         }
-        
+
         .in-progress {
             font-weight: bold;
             color: orange;
@@ -154,7 +154,7 @@
             font-weight: bold;
             color: #33cc33;
         }
-        
+
         .flight-item-link {
             text-decoration: none;
             color: inherit;
@@ -190,27 +190,100 @@
             scrollbar-color: rgba(102, 102, 102, 0.2) #201f20;
         }
 
-    
+        #theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            margin: 0;
+        }
+
+        #theme-toggle svg {
+            fill: #ffffff; /* or any color you prefer */
+            width: 24px;
+            height: 24px;
+        }
+
+        .overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998; /* Ensure it is behind the sidebar but above the content */
+        }
+
+        .overlay.active {
+            display: block; /* Show the overlay when active */
+        }
+
+        #view-all-flights {
+            background-color: rgba(102, 102, 102, 0.1);
+            border: none;
+            border-radius: 5px;
+            color: #ffffff;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        #view-all-flights:hover {
+            background-color: rgba(102, 102, 102, 0.2);
+        }
+
+        #view-all-flights:active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .leaflet-control-container {
+            z-index: 0; /* Ensure this is lower than the sidebar's z-index of 1000 */
+        }
+
+        .leaflet-control {
+            z-index: 0; /* Ensure this is lower than the sidebar's z-index of 1000 */
+        }
+
         @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column; /* Stack content and map vertically */
+            }
+
             .sidebar {
                 display: none;
             }
-    
+
             .burger-menu {
                 display: block;
             }
-    
+
             .content {
                 margin-left: 0;
                 padding: 20px;
+                height: 60vh; /* Adjust height to take the upper half of the screen */
+                box-sizing: border-box;
+                overflow-y: auto;
+                flex: none; /* Ensure it doesn't grow or shrink */
             }
-    
+
+            .sidebar .footer {
+                margin-top: 150%;
+                font-size: 0.9em;
+            }
+
             .sidebar.active {
                 display: flex;
                 position: fixed;
                 top: 0;
                 left: 0;
-                width: 100%;
+                width: 60%;
                 height: 100%;
                 z-index: 999;
                 flex-direction: column;
@@ -219,25 +292,25 @@
                 background-color: #242021;
                 overflow-y: auto;
             }
-    
+
             .sidebar img {
                 margin-top: 60px;
             }
-    
+
             .content h1 {
                 margin-top: 60px;
             }
-    
+
             .map-container {
-                display: none;
+                width: 100%;
+                height: 50vh; /* Adjust height to take the lower half of the screen */
+                margin-left: 0;
             }
         }
-    
-        .modal-content {
-            z-index: 1100; /* Ensure modal content appears above other elements */
-        }
+        
     </style>    
 </head>
+
 <body>
     {% load static %}
 
@@ -253,17 +326,26 @@
             <p>You are logged in as <br> <b>{{ request.session.hub_name }}</b></p>
             <a href="{% url 'flights' %}" class="active">Flights</a>
             <a href="{% url 'uavs' %}">UAVs</a>
-            <a href="{% url 'maintenance' %}">Maintenance</a>
-            <a href="{% url 'settings' %}">Settings</a>
+            <a href="{% url 'uavs' %}">Maintenance (TBD)</a>
+            <a href="{% url 'uavs' %}">Settings (TBD)</a>
             <a href="{% url 'logout' %}">Logout</a>
             <div class="footer">
+                <button id="theme-toggle" class="btn btn-primary">
+                    <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="display:none;">
+                        <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none" />
+                    </svg>
+                    <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <circle cx="12" cy="12" r="10" fill="white" />
+                    </svg>
+                </button>
                 Zajel System UI V0.1 Beta Testing
             </div>
         </div>
         <div class="content">
             <h1>Current Ongoing Flights</h1>
+            <button id="view-all-flights" class="btn btn-secondary">View All</button>
             {% for flight in flights %}
-            <a href="#" class="flight-item-link" data-flight-id="{{ flight.id }}" data-coordinates="{{ flight.coordinates }}">
+            <a href="#" class="flight-item-link" data-flight-id="{{ flight.id }}" data-coordinates="{{ flight.coordinates }}" data-status="{{ flight.status }}">
                 <div class="flight-item">
                     <div class="details-container">
                         <div class="column">
@@ -287,8 +369,10 @@
                 </div>
             </a>
             {% endfor %}
+
         </div>
         <div id="map" class="map-container"></div>
+        <div id="overlay" class="overlay"></div>
     </div>
     
 
@@ -296,33 +380,63 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 
     <script>
+
         document.addEventListener('DOMContentLoaded', function() {
-            var map = L.map('map').setView([26.8206, 30.8025], 6); // Coordinates for Egypt
-    
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            var map = L.map('map', {
+                zoomControl: false // Disable the default zoom control
+            }).setView([26.8206, 30.8025], 6); // Coordinates for Egypt
+
+            var lightTheme = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            }).addTo(map);
-    
+            });
+
+            var darkTheme = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            });
+
+            // Add the light theme to the map by default
+            lightTheme.addTo(map);
+
+            document.getElementById('theme-toggle').addEventListener('click', function() {
+                var sunIcon = document.getElementById('sun-icon');
+                var moonIcon = document.getElementById('moon-icon');
+                
+                if (map.hasLayer(lightTheme)) {
+                    map.removeLayer(lightTheme);
+                    darkTheme.addTo(map);
+                    sunIcon.style.display = 'block';
+                    moonIcon.style.display = 'none';
+                } else {
+                    map.removeLayer(darkTheme);
+                    lightTheme.addTo(map);
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'block';
+                }
+            });
+
             // Placeholder function for flight selection
-            function onFlightSelected(flightId, flightPathCoordinates) {
+            function onFlightSelected(flightId, flightPathCoordinates, flightStatus) {
                 // Clear previous layers
                 map.eachLayer(function (layer) {
                     if (!!layer.toGeoJSON) {
                         map.removeLayer(layer);
                     }
                 });
-    
+
+                // Determine the color based on flight status
+                var color = flightStatus === 'Completed' ? '#33cc33' : '#f9a720';
+
                 // Add new flight path to map with the desired color
                 var flightPath = L.polyline(flightPathCoordinates, {
-                    color: '#f9a720', // Change this to the desired color
+                    color: color, // Change color based on status
                     weight: 4,     // Adjust the line thickness if needed
                     opacity: 0.7   // Adjust the opacity if needed
                 }).addTo(map);
                 map.fitBounds(flightPath.getBounds());
-    
+
                 // Find the selected flight item
                 var selectedItem = document.querySelector(`.flight-item-link[data-flight-id="${flightId}"] .flight-item`);
-    
+
                 // Toggle the active class on the selected flight item
                 if (selectedItem.classList.contains('active')) {
                     selectedItem.classList.remove('active');
@@ -337,26 +451,71 @@
                     document.querySelectorAll('.flight-item').forEach(function(item) {
                         item.classList.remove('active');
                     });
-    
+
                     selectedItem.classList.add('active');
                 }
             }
-    
+
+            // Function to display all flights on the map
+            function viewAllFlights(flights) {
+                // Clear previous layers
+                map.eachLayer(function (layer) {
+                    if (!!layer.toGeoJSON) {
+                        map.removeLayer(layer);
+                    }
+                });
+
+                // Add all flight paths to the map
+                var allCoordinates = [];
+                flights.forEach(function(flight) {
+                    var flightPathCoordinates = JSON.parse(flight.dataset.coordinates.replace(/'/g, '"'));
+                    var flightStatus = flight.dataset.status; // Get the flight status
+                    var color = flightStatus === 'Completed' ? '#33cc33' : '#f9a720';
+                    allCoordinates = allCoordinates.concat(flightPathCoordinates);
+                    L.polyline(flightPathCoordinates, {
+                        color: color, // Change color based on status
+                        weight: 4,       // Adjust the line thickness if needed
+                        opacity: 0.7     // Adjust the opacity if needed
+                    }).addTo(map);
+                });
+
+                if (allCoordinates.length > 0) {
+                    map.fitBounds(allCoordinates);
+                }
+            }
+
             // Call onFlightSelected when a flight is clicked, passing the correct coordinates
             document.querySelectorAll('.flight-item-link').forEach(function(link) {
                 link.addEventListener('click', function(event) {
                     event.preventDefault(); // Prevent default anchor behavior
                     var flightId = this.dataset.flightId;
                     var coordinates = JSON.parse(this.dataset.coordinates.replace(/'/g, '"'));
-                    onFlightSelected(flightId, coordinates);
+                    var status = this.querySelector('.flight-item .completed') ? 'Completed' : 'In Progress';
+                    onFlightSelected(flightId, coordinates, status);
                 });
             });
-        });
-    
-        document.getElementById('burger-menu').addEventListener('click', function() {
+
+            var burgerMenu = document.getElementById('burger-menu');
             var sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('active');
+            var overlay = document.getElementById('overlay');
+
+            burgerMenu.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            document.getElementById('view-all-flights').addEventListener('click', function() {
+                var flights = document.querySelectorAll('.flight-item-link');
+                viewAllFlights(flights);
+            });
         });
+
+
     </script>
     
   
